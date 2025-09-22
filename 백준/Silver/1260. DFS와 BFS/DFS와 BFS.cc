@@ -85,7 +85,7 @@ public:
 		node = nullptr;
 	}
 	void DFS() {
-		int* stack = new int[E*5] {1, first};
+		int* stack = new int[E+V] {1, first};
 		bool* visited = new bool[V + 1] {0};
         visited[0] = true;
 		for (int current; stack[0] != 0;) {
@@ -106,7 +106,7 @@ public:
 		visited = nullptr;
 	}
 	void BFS() {
-		int* queue = new int[E * 5] {1, first};
+		int* queue = new int[E +V] {1, first};
 		bool* visited = new bool[V + 1] {0};
         visited[0] = true;
 		for (int current, currentIndex = 1; currentIndex <= queue[0]; currentIndex++) {
