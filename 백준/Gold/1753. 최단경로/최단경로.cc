@@ -4,9 +4,7 @@ using namespace std;
 class Edge {
 public:
 	int start, end, distance;
-	Edge():start(0), end(0), distance(0){}
-    ~Edge(){}
-    void setEdge(int u, int v, int w) {
+	void setEdge(int u, int v, int w) {
 		start = u;
 		end = v;
 		distance = w;
@@ -90,11 +88,11 @@ public:
 		}
 		for (t = 0; t < V; t++) node[t].makeNode();
 		for (t = 0; t < _E; t++) node[edge[t].start].addEdge(edge[t].end, edge[t].distance);
-		delete[] edge;
+		//delete[] edge;
 		edge = nullptr;
 		int* arr = new int[V];
 		for (t = 0; t < V; t++) node[t].cleaner(V, arr);
-		delete[] arr;
+		//delete[] arr;
 		arr = nullptr;
 	}
 	~Graph() {
