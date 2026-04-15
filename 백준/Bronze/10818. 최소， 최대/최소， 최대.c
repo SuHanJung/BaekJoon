@@ -1,8 +1,21 @@
-#include<stdio.h>
-int main(){
-    int N, Max = -1000000, Min = 1000000;
-    scanf("%d", &N);
-    for(int input;N > 0;N--, scanf("%d", &input), Max = (input > Max) ? input:Max, Min = (input < Min) ? input:Min);
-    printf("%d %d", Min, Max);
-    return 0;
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main() {
+	int a = 0, b = -1000000, c = 1000000;
+	scanf("%d", &a);
+		
+		for (int i = 0, p = 0; i < a; i++) {
+			scanf("%d", &p);
+
+			if (p > b) {
+				b = p;
+			}
+
+			if (p < c) {
+				c = p;
+			}
+		}
+		printf("%d %d", c, b);
+	return 0;
 }
