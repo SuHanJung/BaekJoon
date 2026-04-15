@@ -1,58 +1,129 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <malloc.h>
-int compare(char a[], char b[]) {
-	for (int t = 0; t < 53; t++) {
-		if (a[t] < b[t]) return -1;
-		else if (a[t] > b[t])return 1;
+int compare(char worda[], char wordb[]) {
+	for (int count = 0;;count++) {
+		if (worda[count] == wordb[count]) {
+			if (worda[count] == 0) {
+				return 0;
+			}
+		}
+		else {
+			if (worda[count] > wordb[count]) return -1;
+			else return 1;
+		}
 	}
-	return 0;
 }
-int MergeSorting(char arr[][53], int* ans, int n, int cell) {
-	int* storage = (int*)malloc(sizeof(int) * n);
-	for (int start = 0; start + cell < n; start += 2 * cell) {
-		for (int left = 0, right = 0, end = (start + cell * 2 < n) ? cell : n - start - cell;;) {
-			if (compare(arr[ans[start + left]], arr[ans[start + cell + right]]) == 1) {
-				storage[start + left + right] = ans[start + cell + right];
-				right++;
+
+int sorting(char words[][52], int answer[], int n, int size) {
+	int l = size / 2;
+	int copied[20001] = { 0 };
+	for (int count = 0; (count + 1) * size <= n; count++) {
+		for (int time = 0, x = count * size, y = count * size + l; time < size; time++) {
+			if (x == count * size + l) {
+				copied[(count * size) + time] = answer[y];
+				y++;
 			}
 			else {
-				storage[start + left + right] = ans[start + left];
-				left++;
-			}
-			if (right >= end) {
-				for (; left < cell; left++) storage[start + left + right] = ans[start + left];
-				break;
-			}
-			else if (left >= cell) {
-				for (; right < end; right++) storage[start + left + right] = ans[start + cell + right];
-				break;
+				if (y == (count + 1) * size) {
+					copied[(count * size) + time] = answer[x];
+					x++;
+				}
+				else {
+					if (compare(words[answer[x]], words[answer[y]]) == 1) {
+						copied[(count * size) + time] = answer[x];
+						x++;
+					}
+					else {
+						if (compare(words[answer[x]], words[answer[y]]) == -1) {
+							copied[(count * size) + time] = answer[y];
+							y++;
+						}
+						else {
+							copied[(count * size) + time] = answer[x];
+							copied[(count * size) + time + 1] = answer[x];
+							x++;
+							y++;
+							time++;
+						}
+					}
+				}
 			}
 		}
 	}
-	if (n % (cell * 2) <= cell) for (int t = 0, end = (n / (cell * 2)) * cell * 2; t < end; t++) ans[t] = storage[t];
-	else for (int t = 0; t < n; t++) ans[t] = storage[t];
-	free(storage);
+	if (n % size > l) {
+		for (int time = 0, x = (n / size) * size, y = ((n / size) * size) + l; time < n % size; time++) {
+			if (x == ((n / size) * size) + l) {
+				copied[((n / size) * size) + time] = answer[y];
+				y++;
+			}
+			else {
+				if (y == n) {
+					copied[((n / size) * size) + time] = answer[x];
+					x++;
+				}
+				else {
+					if (compare(words[answer[x]], words[answer[y]]) == 1) {
+						copied[((n / size) * size) + time] = answer[x];
+						x++;
+					}
+					else {
+						if (compare(words[answer[x]], words[answer[y]]) == -1) {
+							copied[((n / size) * size) + time] = answer[y];
+							y++;
+						}
+						else {
+							copied[((n / size) * size) + time] = answer[x];
+							copied[((n / size) * size) + time + 1] = answer[x];
+							x++;
+							y++;
+							time++;
+						}
+					}
+				}
+			}
+		}
+	}
+	else {
+		for (int count = (n / size) * size; count < n; count++) {
+			copied[count] = answer[count];
+		}
+	}
+
+	for (int count = 0; count < n; count++) {
+		answer[count] = copied[count];
+	}
+	return 0;
+	}
+
+int Jsorts(char words[][52], int answer[], int n) {
+	for (int cell = 1; cell < n; cell *= 2) {
+		sorting(words, answer, n, cell * 2);
+	}
 	return 0;
 }
-
-void MergeSort(char arr[][53], int* ans, int n) {
-	for (int cell = 1; cell < n; cell *= 2) {
-		MergeSorting(arr, ans, n, cell);
-	}
-	return;
-}
 int main() {
-	char arr[20000][53] = { 0 };
-	int ans[20000] = { 0 }, N;
-	scanf("%d", &N);
-	for (int t = 0; t < N; t++) {
-			scanf("%s", &arr[t][1]);
-			arr[t][0] = 1;
-			for (; arr[t][arr[t][0]] != 0; arr[t][0]++);
-			ans[t] = t;
+	int n = 0, answer[20001] = { 0 };
+	char words[20001][52] = { 0 };
+	scanf("%d", &n);
+	for (int count = 0; count <= n; count++) answer[count] = count;
+	for (int time = 0; time < n; time++) {
+		scanf("%s", &words[time][1]);
+		for (int length_check = 51; words[time][length_check] == 0; length_check--) {
+			words[time][0] = length_check;
+		}
 	}
-	MergeSort(arr, ans, N);
-	printf("%s\n", &arr[ans[0]][1]);
-	for (int t = 1; t < N; t++) if(compare(arr[ans[t]], arr[ans[t - 1]]) != 0) printf("%s\n", &arr[ans[t]][1]);
+
+	Jsorts(words, answer, n);
+for (int time = 0; time < n; time++) {
+	if (answer[time] != answer[time + 1]) {
+		if(compare(words[answer[time]], words[answer[time + 1]]) != 0){
+		for (int count = 1; words[answer[time]][count] != 0; count++) {
+			printf("%c", words[answer[time]][count]);
+		}
+		if( time + 1 != n) printf("\n");
+	}
+	}
+}
+
 	return 0;
 }
