@@ -1,47 +1,49 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
-void push(int stack[]) {
-	int n;
-	scanf("%d", &n);
-	stack[++stack[0]] = n;
-	return;
-}
-int pop(int stack[]) {
-	if (stack[0] == 0) return -1;
-	else return stack[stack[0]--];
-}
-int size(int stack[]) {
-	return stack[0];
-}
-int empty(int stack[]) {
-	if (stack[0] == 0) return 1;
-	else return 0;
-}
-int top(int stack[]) {
-	if (stack[0] == 0) return -1;
-	else return stack[stack[0]];
-}
-int main() {
-	int N, stack[10001];
-	char command[6];
-	stack[0] = 0;
-	scanf("%d", &N);
-	for (int t = 0; t < N; t++) {
-		scanf("%s", command);
-		switch (command[1]) {
-		case 'u':
-			push(stack);
+#include <stdlib.h>
+int J_stack(int st[]) {
+	int len = st[0]; 
+	char command[6] = { 0 };
+	scanf("%s", command);
+	switch (command[1])
+	{
+	case 'u':
+		scanf("%d\n", &st[len + 1]);
+		st[0]++;
+		break;
+	case 'o':
+		if (command[0] == 't') {
+			if (st[0] == 0) printf("-1\n");
+			else printf("%d\n", st[len]);
 			break;
-		case 'i':
-			printf("%d\n", size(stack));
-			break;
-		case 'm':
-			printf("%d\n", empty(stack));
-			break;
-		default:
-			if (command[0] == 'p') printf("%d\n", pop(stack));
-			else printf("%d\n", top(stack));
 		}
+		else {
+			if (len > 0) {
+				printf("%d\n", st[len]);
+				st[len] = 0;
+				st[0]--;
+			}
+			else printf("-1\n");
+			break;
+		}
+	case 'i':
+		printf("%d\n", st[0]);
+		break;
+	case 'm':
+		if (len == 0) printf("1\n");
+		else printf("0\n");
+		break;
+	default:
+		break;
+	}
+	return 0;
+}
+
+int main() {
+	int Jstack[1000000] = { 0 }, input = 0;
+	scanf("%d", &input);
+	for (int time = 0; time < input; time++) {
+		J_stack(Jstack);
 	}
 	return 0;
 }
