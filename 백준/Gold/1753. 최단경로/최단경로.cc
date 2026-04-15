@@ -198,7 +198,7 @@ int main() {
 	Dijkstra* dij = new Dijkstra(K, V);
 	dij->run(graph);
 	dij->printans(V);
-	delete dij;
+	//delete dij;
 	dij = nullptr;
 	delete graph;
 	graph = nullptr;
