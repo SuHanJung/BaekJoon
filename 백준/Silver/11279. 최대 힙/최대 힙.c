@@ -1,54 +1,55 @@
 #include <stdio.h>
-#include <malloc.h>
-void change(int* n1, int* n2) {
-	int a = *n1;
-	*n1 = *n2;
-	*n2 = a;
-	return;
-}
-
-int maxHeapOut(int* maxHeap) {
-	if (maxHeap[0] == 0) return 0;
-	int biggest = maxHeap[1];
-	maxHeap[1] = maxHeap[maxHeap[0]--];
-	maxHeap[maxHeap[0] + 1] = 0;
-	for (int num = 1; !(maxHeap[num] >= maxHeap[num * 2] && maxHeap[num] >= maxHeap[num * 2 + 1]);) {
-		if (num * 2 == maxHeap[0] && maxHeap[num * 2] > maxHeap[num]) change(&maxHeap[num], &maxHeap[num * 2]);
-		if (num * 2 >= maxHeap[0]) break;
-		if (maxHeap[num * 2] > maxHeap[num * 2 + 1]) {
-			change(&maxHeap[num * 2], &maxHeap[num]);
-			num *= 2;
-		}
-		else {
-			change(&maxHeap[num * 2 + 1], &maxHeap[num]);
-			num = num * 2 + 1;
-		}
-	}
-	return biggest;
-}
-
-void maxHeapIn(int* maxHeap, int input) {
-	maxHeap[++maxHeap[0]] = input;
-	for (int num = maxHeap[0]; num > 1; num /= 2) {
-		if (maxHeap[num] > maxHeap[num / 2]) change(&maxHeap[num], &maxHeap[num / 2]);
-		else break;
-	}
-	return;
-}
-
-int main() {
-	int N;
-	scanf("%d", &N);
-	int* maxHeap = malloc(sizeof(int) * (N + 1));
-	maxHeap[0] = 0;
-	for (int t = 0, input = 0; t < N; t++) {
+#include <stdlib.h>
+int main(){
+	int arr[100001] = { 0 }, n = 0, input = 0, re = 0, k = 0;
+	scanf("%d", &re);
+	for (int t = 0; t < re; t++) {
 		scanf("%d", &input);
 		if (input == 0) {
-			printf("%d", maxHeapOut(maxHeap));
-			printf("\n");
+			if (n == 0) printf("0\n");
+			else {
+				printf("%d\n", arr[1]);
+				arr[1] = arr[n];
+				arr[n] = 0;
+				n--;
+				for (int now = 1; now * 2 + 1 <= n;) {
+					if (arr[now * 2] > arr[now * 2 + 1]) {
+						if (arr[now * 2] > arr[now]) {
+							k = arr[now];
+							arr[now] = arr[now * 2];
+							arr[now * 2] = k;
+							now *= 2;
+						}
+						else break;
+					}
+					else {
+						if (arr[now * 2 + 1] > arr[now]) {
+							k = arr[now];
+							arr[now] = arr[now * 2 + 1];
+							arr[now * 2 + 1] = k;
+							now = now * 2 + 1;
+						}
+						else break;
+					}
+				}
+				if (arr[n] > arr[n / 2] && n > 1) {
+					k = arr[n];
+					arr[n] = arr[n / 2];
+					arr[n / 2] = k;
+				}
+			}
 		}
 		else {
-			maxHeapIn(maxHeap, input);
+			n++;
+			arr[n] = input;
+			for (int now = n; now > 1; now /= 2) {
+				if (arr[now] > arr[now / 2]) {
+					k = arr[now];
+					arr[now] = arr[now / 2];
+					arr[now / 2] = k;
+				}
+				else break;
+			}
 		}
 	}
 	return 0;
