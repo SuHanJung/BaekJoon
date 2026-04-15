@@ -36,41 +36,34 @@ void MergeSort(int* arr, int n) {
 	return;
 }
 
-int n,m;
+int main() {
+	int N, M, input[9] = { 0 }, out[9] = { 0 };
+	scanf("%d %d", &N, &M);
 
-int arr[10];
-int num[10];
-
-void seq(int x, int len){
-    if(len==m){
-        for(int i=0;i<m;i++)
-            printf("%d ",arr[i]);
-        printf("\n");
-        return;
-    }
-
-    int last = 0;
-
-    for(int i=x;i<n;i++){
-        if(num[i]!=last){
-            arr[len] = num[i];
-            last = arr[len];
-            seq(i,len+1);
-        }
-    }
-
-    return;
-}
-
-int main(){
-    scanf("%d %d",&n,&m);
-
-    for(int i=0;i<n;i++)
-        scanf("%d",&num[i]);
-
-    MergeSort(num,n);
-
-    seq(0,0);
-
-    return 0;
+	for (int t = 0; t < N; t++) scanf("%d", &input[t]);
+	MergeSort(input, N);
+	for (int t = 1; t < N; t++) {
+		if (input[t] == input[t - 1]) {
+			for (int tt = t; tt < N; tt++) input[tt - 1] = input[tt];
+			N--;
+            t--;
+		}
+	}
+	for (int piv = M - 1; piv >= 0;) {
+		if (out[M - 1] != 0) printf("\n");
+		for (int t = 0; t < M; t++) {
+			printf("%d", input[out[t]]);
+			if (t != M - 1) printf(" ");
+		}
+		out[piv]++;
+		if (out[piv] >= N) {
+			for (; out[piv] >= N - 1 && piv >= 0; piv--);
+			if (piv >= 0) {
+				out[piv]++;
+				for (int t = piv + 1; t < M; t++) out[t] = out[piv];
+				piv = M - 1;
+			}
+		}
+	}
+	return 0;
 }
