@@ -200,7 +200,7 @@ int main() {
 	dij->printans(V);
 	//delete dij;
 	dij = nullptr;
-	delete graph;
+	//delete graph;
 	graph = nullptr;
 	return 0;
 }
