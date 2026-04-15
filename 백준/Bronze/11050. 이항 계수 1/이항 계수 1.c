@@ -9,7 +9,7 @@ int factorial(int n) {
 
 int main() {
 	int n, r;
-	scanf("%d %d", &n, &r);
+	scanf("%d %d", &n, & r);
 	printf("%d", (factorial(n) / factorial(r)) / factorial(n - r));
 	return 0;
 }
